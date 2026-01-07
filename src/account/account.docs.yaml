@@ -40,13 +40,13 @@ paths:
                         schema:
                             type: object
                             properties:
-                                currentPasswordForPassword:
+                                currentPassword:
                                     type: string
                                     example: "MyCurrentPassword123!"
                                 newPassword:
                                     type: string
                                     example: "MyNewPassword123!"
-                            required: [currentPasswordForPassword, newPassword]
+                            required: [currentPassword, newPassword]
             responses:
                 "200":
                     description: Password changed
