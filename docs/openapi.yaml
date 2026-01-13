@@ -170,8 +170,6 @@ paths:
     # ---------- POSTS ----------
     /posts:
         $ref: ../src/post/post.docs.yaml#/paths/~1posts
-    /posts/image:
-        $ref: ../src/post/post.docs.yaml#/paths/~1posts~1image
     /posts/{postId}:
         $ref: ../src/post/post.docs.yaml#/paths/~1posts~1{postId}
     /posts/{postId}/likes:

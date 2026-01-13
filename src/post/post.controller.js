@@ -10,19 +10,19 @@ export class PostController {
     }
 
     async createNewPost(req, res) {
-        const {
-            postInformation: { title, description, location },
-            postImage,
-            tags,
-        } = req.body;
+        const { title, description, location, tags } = req.body;
         const { id } = req.user;
+        const postImage = req.file ? req.file.filename : null;
+
+        // Parse tags if it's a string
+        const parsedTags = typeof tags === 'string' ? JSON.parse(tags) : tags;
 
         const newPost = await this.service.createPost(
             title,
             description,
             id,
             postImage,
-            tags,
+            parsedTags,
             location
         );
         const postInfo = await this.service.findPost(newPost.id);
@@ -39,10 +39,6 @@ export class PostController {
     async deletePost(req, res) {
         await this.service.deletePost(req.post);
         return res.status(200).send({ message: "Post deleted successfully" });
-    }
-
-    async uploadPostImage(req, res) {
-        return res.status(200).send({ picture: req.file.filename });
     }
 
     async like(req, res) {

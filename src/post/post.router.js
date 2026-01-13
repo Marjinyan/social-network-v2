@@ -10,11 +10,10 @@ const { deletePostValidator, likeValidator } = init.validators;
 
 postRouter.use(isAuthenticated);
 
-postRouter.post("/", postController.createNewPost);
-postRouter.patch(
-    "/image",
-    upload.single("post-image"),
-    postController.uploadPostImage
+postRouter.post(
+    "/",
+    upload.single("image"),
+    postController.createNewPost
 );
 postRouter.post("/:postId/likes", likeValidator, postController.like);
 postRouter.get("/:postId/likes", postController.getAllLikes);

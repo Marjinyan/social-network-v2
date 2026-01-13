@@ -2,16 +2,38 @@ paths:
     /posts:
         post:
             tags: [Post]
-            summary: Create a new post
-            description: Creates a new post for the authenticated user.
+            summary: Create a new post with optional image
+            description: Creates a new post for the authenticated user with title, description, location, tags, and an optional image file.
             security:
                 - bearerAuth: []
             requestBody:
                 required: true
                 content:
-                    application/json:
+                    multipart/form-data:
                         schema:
-                            $ref: "#/components/schemas/Post_CreatePostRequest"
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                    description: Post title
+                                    example: "My first post"
+                                description:
+                                    type: string
+                                    description: Post description
+                                    example: "Some description about my post"
+                                location:
+                                    type: string
+                                    description: Post location
+                                    example: "Glendale, CA"
+                                tags:
+                                    type: string
+                                    description: JSON stringified array of tags
+                                    example: '["travel", "food"]'
+                                image:
+                                    type: string
+                                    format: binary
+                                    description: Optional post image file
+                            required: [title, description]
             responses:
                 "201":
                     description: Post created
@@ -25,49 +47,6 @@ paths:
                                 required: [postInfo]
                 "400":
                     description: Invalid payload
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "../../docs/openapi.yaml#/components/schemas/ErrorResponse"
-                "401":
-                    $ref: "../../docs/openapi.yaml#/components/responses/Unauthorized"
-                "403":
-                    $ref: "../../docs/openapi.yaml#/components/responses/Forbidden"
-                "500":
-                    $ref: "../../docs/openapi.yaml#/components/responses/InternalServerError"
-
-    /posts/image:
-        patch:
-            tags: [Post]
-            summary: Upload post image
-            description: Uploads an image and returns the stored filename. Expects multipart form upload under field name `post-image`.
-            security:
-                - bearerAuth: []
-            requestBody:
-                required: true
-                content:
-                    multipart/form-data:
-                        schema:
-                            type: object
-                            properties:
-                                post-image:
-                                    type: string
-                                    format: binary
-                            required: [post-image]
-            responses:
-                "200":
-                    description: Image uploaded
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    picture:
-                                        type: string
-                                        example: "1735321123456-post.png"
-                                required: [picture]
-                "400":
-                    description: Missing/invalid file
                     content:
                         application/json:
                             schema:
@@ -248,30 +227,26 @@ components:
     schemas:
         Post_CreatePostRequest:
             type: object
+            description: Deprecated - Use multipart/form-data directly on POST /posts
             properties:
-                postInformation:
-                    type: object
-                    properties:
-                        title:
-                            type: string
-                            example: "My first post"
-                        description:
-                            type: string
-                            example: "Some description"
-                        location:
-                            type: string
-                            example: "Glendale, CA"
-                    required: [title, description]
-                postImage:
+                title:
                     type: string
-                    description: Filename previously uploaded via PATCH /posts/image (or empty string)
-                    example: "1735321123456-post.png"
+                    example: "My first post"
+                description:
+                    type: string
+                    example: "Some description"
+                location:
+                    type: string
+                    example: "Glendale, CA"
                 tags:
                     type: array
                     items:
                         type: string
                     example: ["travel", "food"]
-            required: [postInformation]
+                image:
+                    type: string
+                    format: binary
+            required: [title, description]
 
         Post_Row:
             type: object
