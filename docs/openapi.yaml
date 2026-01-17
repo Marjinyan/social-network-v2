@@ -156,14 +156,10 @@ paths:
     # ---------- FOLLOW ----------
     /follow/requests:
         $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1requests
-    /follow/requests/accept:
-        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1requests~1accept
-    /follow/requests/decline:
-        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1requests~1decline
-    /follow/followings:
-        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1followings
-    /follow/followers:
-        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1followers
+    /follow/requests/accept/{id}:
+        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1requests~1accept~1{id}
+    /follow/requests/decline/{id}:
+        $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1requests~1decline~1{id}
     /follow/{id}:
         $ref: ../src/follow/follow.docs.yaml#/paths/~1follow~1{id}
 

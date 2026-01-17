@@ -22,7 +22,7 @@ export class AccountService {
     async findUser(params) {
         return await this.userModel.findOne({
             where: params,
-            attributes: [...this.SAFE_USER, "password"],
+            attributes: this.SAFE_USER,
             paranoid: false,
             include: [
                 {
@@ -50,6 +50,57 @@ export class AccountService {
                 "posts",
             ],
         });
+    }
+
+    async findUserWithPassword(params) {
+        return await this.userModel.findOne({
+            where: params,
+            attributes: [...this.SAFE_USER, "password"],
+            paranoid: false,
+        });
+    }
+
+    async getRelationshipStatus(currentUserId, targetUserId) {
+        if (!currentUserId) {
+            return {
+                requestSent: false,
+                followStatus: false,
+                followsMe: false
+            };
+        }
+
+        // Check if current user sent a pending request to target user
+        const sentRequest = await this.followModel.findOne({
+            where: {
+                from: currentUserId,
+                to: targetUserId,
+                approved: false
+            }
+        });
+
+        // Check if current user follows target user
+        const followStatus = await this.followModel.findOne({
+            where: {
+                from: currentUserId,
+                to: targetUserId,
+                approved: true
+            }
+        });
+
+        // Check if target user follows current user
+        const followsMe = await this.followModel.findOne({
+            where: {
+                from: targetUserId,
+                to: currentUserId,
+                approved: true
+            }
+        });
+
+        return {
+            requestSent: !!sentRequest,
+            followStatus: !!followStatus,
+            followsMe: !!followsMe
+        };
     }
 
     async findAllUsers(text) {

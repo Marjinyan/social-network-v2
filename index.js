@@ -23,7 +23,9 @@ const bundledSpec = await SwaggerParser.bundle(openapiPath);
 
 app.use("/api", swaggerUI.serve, swaggerUI.setup(bundledSpec));
 
-await models.sequelize.sync({ alter: true });
+// Sync database - use { force: false } in production
+// Only creates tables if they don't exist
+await models.sequelize.sync();
 
 const server = http.createServer(app);
 

@@ -14,7 +14,21 @@ export class AccountController {
     async getUserInfo(req, res) {
         const { username } = req.params;
         const user = await this.service.findUser({ username });
-        return res.status(200).send({ user });
+        
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        const currentUserId = req.user?.id;
+        const relationship = await this.service.getRelationshipStatus(
+            currentUserId,
+            user.id
+        );
+
+        return res.status(200).send({ 
+            user: user.toJSON(),
+            ...relationship
+        });
     }
 
     async searchUsers(req, res) {

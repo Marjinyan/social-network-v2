@@ -3,7 +3,7 @@ import init from "./account.provider.js";
 import { upload } from "../../lib/upload.js";
 
 const { accountController } = init.controllers;
-const { isAuthenticated } = init.middlewares;
+const { isAuthenticated, filterPrivateAccountData } = init.middlewares;
 const {
     accountChangePasswordValidator,
     updateBioValidator,
@@ -40,4 +40,4 @@ accountRouter.delete(
 
 accountRouter.get("/search/:text", accountController.searchUsers);
 
-accountRouter.get("/:username", accountController.getUserInfo);
+accountRouter.get("/:username", filterPrivateAccountData, accountController.getUserInfo);

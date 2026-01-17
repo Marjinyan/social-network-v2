@@ -26,19 +26,21 @@ paths:
                 "500":
                     $ref: "#/components/responses/InternalServerError"
 
-    /follow/requests/accept:
+    /follow/requests/accept/{id}:
         patch:
             tags: [Follow]
             summary: Accept follow request
             description: Sets an existing follow request's approved flag to true.
             security:
                 - bearerAuth: []
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/RequestEdge"
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: integer
+                  description: The ID of the follow request
+                  example: 11
             responses:
                 "200":
                     description: Request accepted
@@ -67,19 +69,21 @@ paths:
                 "500":
                     $ref: "#/components/responses/InternalServerError"
 
-    /follow/requests/decline:
+    /follow/requests/decline/{id}:
         patch:
             tags: [Follow]
             summary: Decline follow request
             description: Deletes an existing follow request.
             security:
                 - bearerAuth: []
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/RequestEdge"
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: integer
+                  description: The ID of the follow request
+                  example: 11
             responses:
                 "200":
                     description: Request declined
@@ -101,88 +105,6 @@ paths:
                                 not_found:
                                     value:
                                         message: "Not found"
-                "401":
-                    $ref: "#/components/responses/Unauthorized"
-                "403":
-                    $ref: "#/components/responses/Forbidden"
-                "500":
-                    $ref: "#/components/responses/InternalServerError"
-
-    /follow/followings:
-        post:
-            tags: [Follow]
-            summary: Resolve followings list
-            description: |
-                Accepts a list of followingsInfo objects and returns user records for each `to`.
-                (This is implemented as POST because you send the list in the body.)
-            security:
-                - bearerAuth: []
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                followingsInfo:
-                                    type: array
-                                    items:
-                                        $ref: "#/components/schemas/FollowInfoTo"
-                            required: [followingsInfo]
-            responses:
-                "200":
-                    description: Followings returned
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    followings:
-                                        type: array
-                                        items:
-                                            $ref: "#/components/schemas/UserSafe"
-                                required: [followings]
-                "401":
-                    $ref: "#/components/responses/Unauthorized"
-                "403":
-                    $ref: "#/components/responses/Forbidden"
-                "500":
-                    $ref: "#/components/responses/InternalServerError"
-
-    /follow/followers:
-        post:
-            tags: [Follow]
-            summary: Resolve followers list
-            description: |
-                Accepts a list of followersInfo objects and returns user records for each `from`.
-                (This is implemented as POST because you send the list in the body.)
-            security:
-                - bearerAuth: []
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                followersInfo:
-                                    type: array
-                                    items:
-                                        $ref: "#/components/schemas/FollowInfoFrom"
-                            required: [followersInfo]
-            responses:
-                "200":
-                    description: Followers returned
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    followers:
-                                        type: array
-                                        items:
-                                            $ref: "#/components/schemas/UserSafe"
-                                required: [followers]
                 "401":
                     $ref: "#/components/responses/Unauthorized"
                 "403":
@@ -311,22 +233,6 @@ components:
                 sender:
                     $ref: "#/components/schemas/UserSafe"
             required: [id, sender]
-
-        FollowInfoTo:
-            type: object
-            properties:
-                to:
-                    type: integer
-                    example: 45
-            required: [to]
-
-        FollowInfoFrom:
-            type: object
-            properties:
-                from:
-                    type: integer
-                    example: 45
-            required: [from]
 
         FollowRow:
             type: object

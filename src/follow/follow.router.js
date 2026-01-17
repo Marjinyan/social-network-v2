@@ -12,15 +12,13 @@ followRouter.use(isAuthenticated);
 
 followRouter.get("/requests", followController.getRequests);
 followRouter.patch(
-    "/requests/accept",
+    "/requests/accept/:id",
     acceptRequestValidator,
     followController.acceptRequest
 );
 followRouter.patch(
-    "/requests/decline",
+    "/requests/decline/:id",
     declineRequestValidator,
     followController.declineRequest
 );
-followRouter.post("/followings", followController.getFollowings);
-followRouter.post("/followers", followController.getFollowers);
 followRouter.post("/:id", followValidator, followController.follow);

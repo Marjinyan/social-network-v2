@@ -21,24 +21,6 @@ export class FollowService {
         });
     }
 
-    async getAllFollowings(followingsInfo) {
-        let followings = [];
-        for (let following of followingsInfo) {
-            let user = await this.userModel.findByPk(following.to);
-            followings.push(user);
-        }
-        return followings;
-    }
-
-    async getAllFollowers(followersInfo) {
-        let followers = [];
-        for (let follower of followersInfo) {
-            let user = await this.userModel.findByPk(follower.from);
-            followers.push(user);
-        }
-        return followers;
-    }
-
     async getUser(id) {
         return await this.userModel.findByPk(id, {
             attributes: this.SAFE_USER,
@@ -47,6 +29,10 @@ export class FollowService {
 
     async getRequest(from, to) {
         return await this.followModel.findOne({ where: { from, to } });
+    }
+
+    async getRequestById(id) {
+        return await this.followModel.findByPk(id);
     }
 
     async createRequest(from, to, approved, requested) {

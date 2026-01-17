@@ -13,7 +13,7 @@ export default async function accountChangeEmailValidator(
             .send({ message: "Missing/Invalid credentials..." });
     }
 
-    const user = await service.findUser({ email });
+    const user = await service.findUserWithPassword({ email });
     if (!user) {
         return res.status(404).send({ message: "User not found..." });
     }

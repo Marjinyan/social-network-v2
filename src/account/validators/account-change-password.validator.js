@@ -49,7 +49,7 @@ export default async function accountChangePasswordValidator(
             .send({ message: "New password must be at least 6 characters long" });
     }
 
-    const user = await service.findUser({ id });
+    const user = await service.findUserWithPassword({ id });
     const isPasswordCorrect = await service.checkPassword(
         currentPassword,
         user.password

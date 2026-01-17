@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { AccountController } from "./account.controller.js";
 import { AccountService } from "./account.service.js";
 import { isAuthenticated } from "../../middlewares/authentication.js";
+import { filterPrivateAccountData } from "../../middlewares/privacy.js";
 import { Op } from "sequelize";
 import { SAFE_USER } from "../../lib/attributes.js";
 import { BcryptService } from "./bcrypt.service.js";
@@ -42,6 +43,7 @@ loader.controllers = {
 
 loader.middlewares = {
     isAuthenticated: isAuthenticated.bind(null, loader.services.accountService),
+    filterPrivateAccountData: filterPrivateAccountData(models.Follow),
 };
 
 loader.validators = {
