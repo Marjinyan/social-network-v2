@@ -25,9 +25,22 @@ export class AccountController {
             user.id
         );
 
-        return res.status(200).send({ 
-            user: user.toJSON(),
-            ...relationship
+        const userObj = user.toJSON();
+        if (userObj.posts && Array.isArray(userObj.posts)) {
+            userObj.posts = userObj.posts.map((p) => {
+                const likesCount = p.postReactions ? p.postReactions.length : 0;
+                const commentsCount = p.postComments ? p.postComments.length : 0;
+                const likedByMe = currentUserId
+                    ? !!(p.postReactions || []).find((r) => r.userId === currentUserId)
+                    : false;
+                const { postReactions, postComments, ...rest } = p;
+                return { ...rest, likesCount, commentsCount, likedByMe };
+            });
+        }
+
+        return res.status(200).send({
+            user: userObj,
+            ...relationship,
         });
     }
 

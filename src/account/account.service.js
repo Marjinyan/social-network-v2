@@ -2,6 +2,9 @@ export class AccountService {
     constructor(
         userModel,
         followModel,
+        postModel,
+        commentModel,
+        postReactionModel,
         bcryptService,
         chatService,
         sequelize,
@@ -10,6 +13,9 @@ export class AccountService {
     ) {
         this.userModel = userModel;
         this.followModel = followModel;
+        this.postModel = postModel;
+        this.commentModel = commentModel;
+        this.postReactionModel = postReactionModel;
         this.bcryptService = bcryptService;
         this.chatService = chatService;
         this.sequelize = sequelize;
@@ -47,7 +53,22 @@ export class AccountService {
                         },
                     ],
                 },
-                "posts",
+                {
+                    model: this.postModel,
+                    as: "posts",
+                    include: [
+                        {
+                            model: this.commentModel,
+                            as: "postComments",
+                            attributes: ["id"],
+                        },
+                                {
+                                    model: this.postReactionModel,
+                                    as: "postReactions",
+                                    attributes: ["id", "userId"],
+                                },
+                    ],
+                },
             ],
         });
     }

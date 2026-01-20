@@ -17,6 +17,9 @@ const bcryptService = new BcryptService(bcrypt);
 const accountService = new AccountService(
     models.User,
     models.Follow,
+    models.Post,
+    models.Comment,
+    models.PostReaction,
     bcryptService,
     chatService,
     sequelize,
