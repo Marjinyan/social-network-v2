@@ -43,4 +43,20 @@ export class FollowService {
             requested,
         });
     }
+
+    async updateRequest(id, updates) {
+        const request = await this.followModel.findByPk(id);
+        if (request) {
+            return await request.update(updates);
+        }
+        return null;
+    }
+
+    async deleteRequest(id) {
+        const request = await this.followModel.findByPk(id);
+        if (request) {
+            return await request.destroy();
+        }
+        return null;
+    }
 }

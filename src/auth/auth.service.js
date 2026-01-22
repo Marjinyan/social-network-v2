@@ -71,6 +71,8 @@ export class AuthService {
                 {
                     model: this.followModel,
                     as: "followings",
+                    where: { approved: true },
+                    required: false,
                     include: [
                         {
                             model: this.userModel,
@@ -82,6 +84,8 @@ export class AuthService {
                 {
                     model: this.followModel,
                     as: "followers",
+                    where: { approved: true },
+                    required: false,
                     include: [
                         {
                             model: this.userModel,
