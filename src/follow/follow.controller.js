@@ -3,6 +3,8 @@ export class FollowController {
         this.service = service;
 
         this.getRequests = this.getRequests.bind(this);
+        this.acceptRequest = this.acceptRequest.bind(this);
+        this.declineRequest = this.declineRequest.bind(this);
         this.follow = this.follow.bind(this);
     }
 
